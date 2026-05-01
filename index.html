@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-
 <html lang="ru">
 <head>
 <meta charset="UTF-8">
@@ -8,152 +7,137 @@
 <style>
   * { margin: 0; padding: 0; box-sizing: border-box; }
 
-body {
-width: 100vw;
-height: 100vh;
-background: url(‘bg.png’) center center / cover no-repeat;
-overflow: hidden;
-position: relative;
-}
+  body {
+    width: 100vw;
+    height: 100vh;
+    background: url('wallpaper.png') center center / cover no-repeat;
+    overflow: hidden;
+    position: relative;
+  }
 
-/* Хомяк */
-#hamster-wrapper {
-position: absolute;
-bottom: 100px;
-left: 50%;
-transform: translateX(-50%);
-width: 128px;
-height: 128px;
-cursor: grab;
-user-select: none;
-}
-#hamster-wrapper.dragging { cursor: grabbing; }
-#hamster-img {
-width: 128px;
-height: 128px;
-image-rendering: pixelated;
-display: block;
-}
+  #hamster-wrapper {
+    position: absolute;
+    width: var(--hamster-size);
+    height: var(--hamster-size);
+    cursor: grab;
+    user-select: none;
+  }
+  #hamster-wrapper.dragging { cursor: grabbing; }
 
-/* Иконка файла */
-#file-icon {
-position: absolute;
-top: 60px;
-right: 80px;
-width: 48px;
-height: 48px;
-cursor: grab;
-user-select: none;
-}
-#file-icon img { width: 48px; height: 48px; }
-#file-icon.dragging { cursor: grabbing; }
-#file-icon.hidden { display: none; }
+  #hamster-img {
+    width: var(--hamster-size);
+    height: var(--hamster-size);
+    image-rendering: pixelated;
+    display: block;
+  }
 
-/* Плавающие элементы */
-#floating-hamster {
-position: fixed;
-width: 128px;
-height: 128px;
-pointer-events: none;
-z-index: 999;
-display: none;
-image-rendering: pixelated;
-transform: translate(-50%, -50%);
-}
-#floating-file {
-position: fixed;
-width: 48px;
-height: 48px;
-pointer-events: none;
-z-index: 999;
-display: none;
-transform: translate(-50%, -50%);
-}
-#floating-file img { width: 48px; height: 48px; }
+  #file-icon {
+    position: absolute;
+    top: 60px;
+    right: 80px;
+    width: 48px;
+    height: 48px;
+    cursor: grab;
+    user-select: none;
+  }
+  #file-icon img { width: 48px; height: 48px; }
+  #file-icon.dragging { cursor: grabbing; }
+  #file-icon.hidden { display: none; }
 
-/* ДОК */
-#dock-wrap {
-position: fixed;
-bottom: 16px;
-left: 50%;
-transform: translateX(-50%);
-z-index: 100;
-display: flex;
-flex-direction: column;
-align-items: center;
-gap: 8px;
-}
+  #floating-hamster {
+    position: fixed;
+    width: var(--hamster-size);
+    height: var(--hamster-size);
+    pointer-events: none;
+    z-index: 999;
+    display: none;
+    image-rendering: pixelated;
+    transform: translate(-50%, -50%);
+  }
+  #floating-file {
+    position: fixed;
+    width: 48px;
+    height: 48px;
+    pointer-events: none;
+    z-index: 999;
+    display: none;
+    transform: translate(-50%, -50%);
+  }
+  #floating-file img { width: 48px; height: 48px; }
 
-#dock {
-display: flex;
-align-items: center;
-gap: 8px;
-background: rgba(255,255,255,0.15);
-backdrop-filter: blur(12px);
--webkit-backdrop-filter: blur(12px);
-border: 1px solid rgba(255,255,255,0.25);
-border-radius: 20px;
-padding: 8px 12px;
-transition: opacity 0.3s, transform 0.3s;
-}
-#dock.hidden {
-opacity: 0;
-pointer-events: none;
-transform: translateY(20px);
-}
+  /* ДОК */
+  #dock {
+    position: fixed;
+    bottom: 16px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(255,255,255,0.15);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(255,255,255,0.25);
+    border-radius: 20px;
+    padding: 8px 12px;
+    transition: opacity 0.3s, transform 0.3s;
+  }
+  #dock.hidden {
+    opacity: 0;
+    pointer-events: none;
+    transform: translateX(-50%) translateY(20px);
+  }
 
-.dock-btn {
-width: 44px;
-height: 44px;
-cursor: pointer;
-border-radius: 10px;
-overflow: hidden;
-transition: transform 0.15s;
-flex-shrink: 0;
-}
-.dock-btn:hover { transform: scale(1.18) translateY(-4px); }
-.dock-btn:active { transform: scale(0.95); }
-.dock-btn img { width: 44px; height: 44px; display: block; }
-.dock-btn.active { outline: 2px solid rgba(255,255,255,0.8); border-radius: 10px; }
+  .dock-btn {
+    width: 44px;
+    height: 44px;
+    cursor: pointer;
+    border-radius: 10px;
+    overflow: hidden;
+    transition: transform 0.15s;
+    flex-shrink: 0;
+  }
+  .dock-btn:hover { transform: scale(1.18) translateY(-4px); }
+  .dock-btn:active { transform: scale(0.95); }
+  .dock-btn img { width: 44px; height: 44px; display: block; }
 
-.dock-sep {
-width: 1px;
-height: 32px;
-background: rgba(255,255,255,0.3);
-flex-shrink: 0;
-}
+  .dock-sep {
+    width: 1px;
+    height: 32px;
+    background: rgba(255,255,255,0.3);
+    flex-shrink: 0;
+  }
 
-/* Кнопка скрыть/показать */
-#dock-toggle {
-width: 36px;
-height: 36px;
-cursor: pointer;
-transition: transform 0.15s, opacity 0.15s;
-}
-#dock-toggle:hover { transform: scale(1.15); }
-#dock-toggle img { width: 36px; height: 36px; display: block; }
+  #dock-toggle {
+    width: 36px;
+    height: 36px;
+    cursor: pointer;
+    transition: transform 0.15s;
+    flex-shrink: 0;
+  }
+  #dock-toggle:hover { transform: scale(1.15); }
+  #dock-toggle img { width: 36px; height: 36px; display: block; }
 
-/* Точка когда dok скрыт */
-#dock-dot {
-width: 10px;
-height: 10px;
-border-radius: 50%;
-background: rgba(255,255,255,0.5);
-cursor: pointer;
-display: none;
-transition: transform 0.15s, background 0.15s;
-position: fixed;
-bottom: 20px;
-left: 50%;
-transform: translateX(-50%);
-z-index: 100;
-}
-#dock-dot:hover {
-background: rgba(255,255,255,0.9);
-transform: translateX(-50%) scale(1.4);
-}
+  #dock-dot {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.5);
+    cursor: pointer;
+    display: none;
+    z-index: 100;
+    transition: background 0.15s, transform 0.15s;
+  }
+  #dock-dot:hover {
+    background: rgba(255,255,255,0.9);
+    transform: translateX(-50%) scale(1.4);
+  }
 </style>
-
 </head>
 <body>
 
@@ -168,24 +152,28 @@ transform: translateX(-50%) scale(1.4);
 <img id="floating-hamster" src="anims/hamster_0060.png" alt="" draggable="false">
 <div id="floating-file"><img src="file.png" alt="" draggable="false"></div>
 
-<!-- ДОК -->
-
-<div id="dock-wrap">
-  <div id="dock">
-    <div class="dock-btn" id="btn-idle"    title="Отдыхать"><img src="idle.png"></div>
-    <div class="dock-btn" id="btn-moving"  title="Бежать"><img src="moving.png"></div>
-    <div class="dock-btn" id="btn-music"   title="Музыка"><img src="music.png"></div>
-    <div class="dock-btn" id="btn-typing"  title="Печатать"><img src="typing.png"></div>
-    <div class="dock-btn" id="btn-photo"   title="Фото"><img src="photo.png"></div>
-    <div class="dock-btn" id="btn-sleep"   title="Спать"><img src="sleep.png"></div>
-    <div class="dock-sep"></div>
-    <div id="dock-toggle" title="Скрыть"><img src="hide.png"></div>
-  </div>
+<div id="dock">
+  <div class="dock-btn" id="btn-music"   title="Музыка"><img src="music.png"></div>
+  <div class="dock-btn" id="btn-typing"  title="Печатать"><img src="typing.png"></div>
+  <div class="dock-btn" id="btn-photo"   title="Фото"><img src="photo.png"></div>
+  <div class="dock-btn" id="btn-sleep"   title="Спать"><img src="sleep.png"></div>
+  <div class="dock-btn" id="btn-moving"  title="Бежать"><img src="moving.png"></div>
+  <div class="dock-sep"></div>
+  <div id="dock-toggle" title="Скрыть"><img src="hide.png"></div>
 </div>
 
-<div id="dock-dot" title="Показать dock"></div>
+<div id="dock-dot"></div>
 
 <script>
+// ===== РАЗМЕР ХОМЯКА =====
+const HAMSTER_SIZE = 128; // px — меняй здесь
+document.documentElement.style.setProperty('--hamster-size', HAMSTER_SIZE + 'px');
+
+// ===== СТАРТОВАЯ ПОЗИЦИЯ =====
+const hamsterWrapper = document.getElementById('hamster-wrapper');
+hamsterWrapper.style.left = (window.innerWidth / 2 - HAMSTER_SIZE / 2) + 'px';
+hamsterWrapper.style.top  = (window.innerHeight - HAMSTER_SIZE - 100) + 'px';
+
 // ===== АНИМАЦИИ =====
 function range(start, count) {
   return Array.from({length: count}, (_, i) =>
@@ -197,7 +185,6 @@ function rangeRev(start, count) {
 }
 
 const ANIMS = {
-  // Idle
   idle:        { frames: range(60,20),   fps: 25, loop: true  },
   idle2:       { frames: range(0,60),    fps: 25, loop: true  },
   idle3:       { frames: range(220,60),  fps: 25, loop: true  },
@@ -205,38 +192,30 @@ const ANIMS = {
   idle5:       { frames: range(80,40),   fps: 25, loop: true  },
   idle6:       { frames: range(150,70),  fps: 25, loop: true  },
   idle8:       { frames: range(420,70),  fps: 25, loop: true  },
-  // Движение
   moveStart:   { frames: range(1120,5),  fps: 25, loop: false },
   moving:      { frames: range(1145,30), fps: 25, loop: true  },
   moveStop:    { frames: range(1175,15), fps: 25, loop: false },
-  // Музыка
   musicStart:  { frames: range(990,50),  fps: 25, loop: false },
   musicLoop:   { frames: range(1040,40), fps: 25, loop: true  },
   musicStop:   { frames: range(1080,40), fps: 25, loop: false },
-  // Печатать
   typingStart: { frames: range(680,40),  fps: 25, loop: false },
   typing:      { frames: range(720,60),  fps: 25, loop: true  },
   typingStop:  { frames: range(780,40),  fps: 25, loop: false },
-  // Фото
   photoFinish: { frames: range(280,140), fps: 25, loop: false },
-  // Сон — idle1 (длинный, медленный)
-  sleep:       { frames: range(1560,80), fps: 15, loop: true  },
-  // Файл
-  dragFileStart:      { frames: range(820,10),  fps: 25, loop: false },
-  dragFileProcessing: { frames: range(830,30),  fps: 25, loop: true  },
-  dragFileFinish:     { frames: range(860,130), fps: 25, loop: false },
+  sleep:       { frames: range(1560,80), fps: 15, loop: false },
+  dragFileStart:      { frames: range(820,10),    fps: 25, loop: false },
+  dragFileProcessing: { frames: range(830,30),    fps: 25, loop: true  },
+  dragFileFinish:     { frames: range(860,130),   fps: 25, loop: false },
   dragFileCancel:     { frames: rangeRev(829,10), fps: 25, loop: false },
 };
 
-const hamsterImg     = document.getElementById('hamster-img');
-const hamsterWrapper = document.getElementById('hamster-wrapper');
-const fileIcon       = document.getElementById('file-icon');
-const floatHamster   = document.getElementById('floating-hamster');
-const floatFile      = document.getElementById('floating-file');
+const hamsterImg   = document.getElementById('hamster-img');
+const fileIcon     = document.getElementById('file-icon');
+const floatHamster = document.getElementById('floating-hamster');
+const floatFile    = document.getElementById('floating-file');
 
 let currentAnim = null, animTimer = null, animFrame = 0, animDone = null;
 let isEating = false, isDragHamster = false, isDragFile = false, fileOverHamster = false;
-let forcedAnim = null; // анимация из дока (не прерывать idle-таймером)
 
 function playAnim(name, onDone) {
   clearTimeout(animTimer);
@@ -257,67 +236,50 @@ function playAnim(name, onDone) {
   step();
 }
 
-// Случайный idle
+// Случайный idle — просто один раз проигрывает вариант и снова выбирает
 function playRandomIdle() {
-  if (isEating || isDragHamster || forcedAnim) return;
+  if (isEating || isDragHamster) return;
   const v = ['idle','idle','idle2','idle3','idle4','idle5','idle6','idle8'];
-  playAnim(v[Math.random()*v.length|0], () => setTimeout(playRandomIdle, Math.random()*2000+500));
+  playAnim(v[Math.random()*v.length|0], () => setTimeout(playRandomIdle, Math.random()*1500+300));
 }
 
-// ===== КНОПКИ ДОКА =====
-function setActiveBtn(id) {
-  document.querySelectorAll('.dock-btn').forEach(b => b.classList.remove('active'));
-  if (id) document.getElementById(id)?.classList.add('active');
-}
-
-function dockAction(name, startAnim, loopAnim, stopAnim) {
-  // Если уже играет эта же — останавливаем
-  if (forcedAnim === name) {
-    forcedAnim = null;
-    setActiveBtn(null);
-    if (stopAnim) {
-      playAnim(stopAnim, () => setTimeout(playRandomIdle, 300));
-    } else {
-      setTimeout(playRandomIdle, 100);
-    }
-    return;
-  }
-  forcedAnim = name;
-  setActiveBtn('btn-' + name);
-  if (startAnim) {
-    playAnim(startAnim, () => playAnim(loopAnim));
-  } else {
-    playAnim(loopAnim);
-  }
-}
-
-document.getElementById('btn-idle').addEventListener('click', () => {
-  forcedAnim = null;
-  setActiveBtn(null);
-  setTimeout(playRandomIdle, 100);
+// ===== КНОПКИ ДОКА — один раз проигрывает и всё =====
+document.getElementById('btn-music').addEventListener('click', () => {
+  if (isEating || isDragHamster) return;
+  playAnim('musicStart', () =>
+    playAnim('musicLoop', () =>   // musicLoop сам закончится т.к. loop:false теперь
+      playAnim('musicStop', () => setTimeout(playRandomIdle, 300))
+    )
+  );
 });
 
-document.getElementById('btn-moving').addEventListener('click', () =>
-  dockAction('moving', 'moveStart', 'moving', 'moveStop'));
-
-document.getElementById('btn-music').addEventListener('click', () =>
-  dockAction('music', 'musicStart', 'musicLoop', 'musicStop'));
-
-document.getElementById('btn-typing').addEventListener('click', () =>
-  dockAction('typing', 'typingStart', 'typing', 'typingStop'));
+document.getElementById('btn-typing').addEventListener('click', () => {
+  if (isEating || isDragHamster) return;
+  playAnim('typingStart', () =>
+    playAnim('typing', () =>
+      playAnim('typingStop', () => setTimeout(playRandomIdle, 300))
+    )
+  );
+});
 
 document.getElementById('btn-photo').addEventListener('click', () => {
-  forcedAnim = 'photo';
-  setActiveBtn('btn-photo');
-  playAnim('photoFinish', () => {
-    forcedAnim = null;
-    setActiveBtn(null);
-    setTimeout(playRandomIdle, 300);
-  });
+  if (isEating || isDragHamster) return;
+  playAnim('photoFinish', () => setTimeout(playRandomIdle, 300));
 });
 
-document.getElementById('btn-sleep').addEventListener('click', () =>
-  dockAction('sleep', null, 'sleep', null));
+document.getElementById('btn-sleep').addEventListener('click', () => {
+  if (isEating || isDragHamster) return;
+  playAnim('sleep', () => setTimeout(playRandomIdle, 300));
+});
+
+document.getElementById('btn-moving').addEventListener('click', () => {
+  if (isEating || isDragHamster) return;
+  playAnim('moveStart', () =>
+    playAnim('moving', () =>
+      playAnim('moveStop', () => setTimeout(playRandomIdle, 300))
+    )
+  );
+});
 
 // ===== ДОК СКРЫТЬ/ПОКАЗАТЬ =====
 const dock    = document.getElementById('dock');
@@ -332,7 +294,7 @@ dockDot.addEventListener('click', () => {
   dockDot.style.display = 'none';
 });
 
-// ===== DRAG ХОМЯКА =====
+// ===== DRAG ХОМЯКА — остаётся где бросил =====
 hamsterWrapper.addEventListener('mousedown', e => startDragH(e.clientX, e.clientY));
 hamsterWrapper.addEventListener('touchstart', e => startDragH(e.touches[0].clientX, e.touches[0].clientY), {passive:true});
 
@@ -345,8 +307,6 @@ function startDragH(x, y) {
   floatHamster.style.display = 'block';
   floatHamster.style.left = x+'px';
   floatHamster.style.top  = y+'px';
-  const prev = forcedAnim;
-  forcedAnim = null;
   playAnim('moveStart', () => playAnim('moving'));
 }
 
@@ -357,15 +317,18 @@ function moveH(x, y) {
   floatHamster.style.top  = y+'px';
 }
 
-document.addEventListener('mouseup', stopDragH);
-document.addEventListener('touchend', stopDragH);
-function stopDragH() {
-  if (!isDragHamster) return;
+document.addEventListener('mouseup', e => { if(isDragHamster) stopDragH(e.clientX, e.clientY); });
+document.addEventListener('touchend', e => { if(isDragHamster) stopDragH(e.changedTouches[0].clientX, e.changedTouches[0].clientY); });
+
+function stopDragH(x, y) {
   isDragHamster = false;
   hamsterWrapper.classList.remove('dragging');
+  // Хомяк остаётся там где бросили
+  hamsterWrapper.style.left = (x - HAMSTER_SIZE / 2) + 'px';
+  hamsterWrapper.style.top  = (y - HAMSTER_SIZE / 2) + 'px';
   hamsterImg.style.opacity = '1';
   floatHamster.style.display = 'none';
-  playAnim('moveStop', () => { forcedAnim = null; setTimeout(playRandomIdle, 300); });
+  playAnim('moveStop', () => setTimeout(playRandomIdle, 300));
 }
 
 // ===== DRAG ФАЙЛА =====
@@ -426,6 +389,5 @@ function stopDragF() {
 // ===== СТАРТ =====
 playRandomIdle();
 </script>
-
 </body>
 </html>
